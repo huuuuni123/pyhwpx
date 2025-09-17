@@ -1,0 +1,2432 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b8ce06af",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Move명령어와 `hwp.set_font(TextColor=\"Red\")` 명령어를 통해 \"대통령\" 또는 \"탄핵\"이 포함된 단어(스페이스로 구분되는)를 빨간색으로 표시하기\n",
+    "\n",
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "hwp.MoveDocBegin()  # 문서 시작점으로 이동한 후,\n",
+    "while hwp.MoveSelNextWord():  # 다음 단어를 선택(다음단어가 없으면 break)\n",
+    "    text = hwp.get_selected_text()  # 문자열을 가져와서\n",
+    "    if \"대통령\" in text or \"탄핵\" in text:  # 검사한 후\n",
+    "        hwp.set_font(TextColor=\"Red\")  # 있으면 빨갛게\n",
+    "    hwp.Cancel()  # 선택해제\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fdddd72b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 대통령 또는 탄핵이라는 단어가 포함된 문단만 남기고 전부 삭제하기  \n",
+    "from pyhwpx import Hwp\n",
+    "hwp = Hwp()  \n",
+    "\n",
+    "\n",
+    "hwp.MoveDocBegin()  # 문서 시작점으로\n",
+    "while True:  \n",
+    "    hwp.MoveSelParaEnd()  # 문단 하나를 선택한 후\n",
+    "    text = hwp.get_selected_text()  # 파이썬으로 가져와서\n",
+    "    if not (\"대통령\" in text or \"탄핵\" in text):  # 조건과 맞지 않으면\n",
+    "        hwp.Delete()  # 문단 삭제\n",
+    "    if not text:  # 빈 문단이면\n",
+    "        hwp.MoveLeft()  # Cancel 실행시 다음 문단으로 넘어가버리는 걸 방지하기 위해 추가\n",
+    "    hwp.Cancel()  \n",
+    "    if not hwp.MoveNextParaBegin():  \n",
+    "        break\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "70446f83",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 특정 좌표로 이동하는 명령어\n",
+    "\n",
+    "box_left = hwp.get_pos()\n",
+    "\n",
+    "hwp.set_pos(7,0,0)\n",
+    "hwp.SelectAll()\n",
+    "hwp.Copy()\n",
+    "hwp.set_pos(*box_left)\n",
+    "hwp.Paste()\n",
+    "\n",
+    "\n",
+    "# 위의 별표는 튜플 언패킹이라는 유용한 파이썬 문법으로,\n",
+    "# 코드가 실행될 때 튜플 한 개를 그 안에 들어있던 정수 세 개로 바꿔줍니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "49ff557c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<win32com.gen_py.HwpObject 1.0 Type Library.IDHwpCtrlCode instance at 0x3092481710496>,\n",
+       " <win32com.gen_py.HwpObject 1.0 Type Library.IDHwpCtrlCode instance at 0x3092520806368>,\n",
+       " <win32com.gen_py.HwpObject 1.0 Type Library.IDHwpCtrlCode instance at 0x3092520913712>]"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "hwp = Hwp()  \n",
+    "\n",
+    "hwp.ctrl_list\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "85910442",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['CLSID',\n",
+       " 'CtrlCh',\n",
+       " 'CtrlID',\n",
+       " 'GetAnchorPos',\n",
+       " 'HasList',\n",
+       " 'Next',\n",
+       " 'Prev',\n",
+       " 'Properties',\n",
+       " 'UserDesc',\n",
+       " '_ApplyTypes_',\n",
+       " '__class__',\n",
+       " '__delattr__',\n",
+       " '__dict__',\n",
+       " '__dir__',\n",
+       " '__doc__',\n",
+       " '__eq__',\n",
+       " '__format__',\n",
+       " '__ge__',\n",
+       " '__getattr__',\n",
+       " '__getattribute__',\n",
+       " '__getstate__',\n",
+       " '__gt__',\n",
+       " '__hash__',\n",
+       " '__init__',\n",
+       " '__init_subclass__',\n",
+       " '__iter__',\n",
+       " '__le__',\n",
+       " '__lt__',\n",
+       " '__module__',\n",
+       " '__ne__',\n",
+       " '__new__',\n",
+       " '__reduce__',\n",
+       " '__reduce_ex__',\n",
+       " '__repr__',\n",
+       " '__setattr__',\n",
+       " '__sizeof__',\n",
+       " '__str__',\n",
+       " '__subclasshook__',\n",
+       " '__weakref__',\n",
+       " '_get_good_object_',\n",
+       " '_get_good_single_object_',\n",
+       " '_oleobj_',\n",
+       " '_prop_map_get_',\n",
+       " '_prop_map_put_',\n",
+       " 'coclass_clsid']"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dir(hwp.ctrl_list[0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "d768e15b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'표'"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "hwp.ctrl_list[0].UserDesc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "fc35a2ef",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "41952"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "hwp.ctrl_list[0].Properties.Item(\"Width\")\n",
+    "#인수명 따옴표 주의하고, 객체(ctrl_list)의 속성(properties)들, 그리고 메서드(함수)기입시 대문자로 하기. \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "1638291f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5128"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "hwp.ctrl_list[0].Properties.Item(\"Height\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d98dcaf4",
+   "metadata": {},
+   "source": [
+    "속성은 무엇이고 메서드는 무엇인지 \n",
+    "아주 쉽게 설명하면:\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 속성(property)\n",
+    "- **객체가 가지고 있는 값(데이터)**  \n",
+    "- 예시: 사람 객체의 이름, 나이, 키 등  \n",
+    "- 파이썬 코드에서 점(`.`)으로 접근하는 값  \n",
+    "- 예:  \n",
+    "  ```python\n",
+    "  hwp.ctrl_list[0].Properties  # Properties는 속성(데이터)\n",
+    "  ctrl.UserDesc  # UserDesc도 속성(데이터)\n",
+    "  ```\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 메서드(method)\n",
+    "- **객체가 할 수 있는 동작(함수)**  \n",
+    "- 예시: 사람 객체의 \"걷기\", \"말하기\" 등  \n",
+    "- 파이썬 코드에서 점(`.`) 뒤에 괄호 `()`가 붙는 것  \n",
+    "- 예:  \n",
+    "  ```python\n",
+    "  hwp.MoveDocBegin()  # MoveDocBegin은 메서드(동작)\n",
+    "  hwp.set_font(TextColor=\"Red\")  # set_font도 메서드(동작)\n",
+    "  prop.Item(\"Width\")  # Item도 메서드(동작)\n",
+    "  ```\n",
+    "\n",
+    "---\n",
+    "\n",
+    "#### 정리\n",
+    "- **속성**: 값(데이터), 괄호 없음  \n",
+    "- **메서드**: 동작(함수), 괄호 있음\n",
+    "\n",
+    "궁금한 점 더 있으면 언제든 질문해 주세요!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e64c2d38",
+   "metadata": {},
+   "source": [
+    "① UserDesc 속성은 컨트롤의 이름을 문자열로 알려줍니다.\n",
+    "ctrl.UserDesc 라는 코드로 빠르게 알아볼 수 있습니다.\n",
+    "\n",
+    "\n",
+    "② Properties 속성은 컨트롤의 모든 속성정보를 담고 있습니다.\n",
+    "특정 속성을 조회하는 방법은 ctrl.Properties.Item(\"속성명\")을 실행하면 됩니다.\n",
+    "\n",
+    "\n",
+    "대신 속성을 변경하는 방법은 아래와 같이 일련의 코드를 실행해야 합니다.\n",
+    "\n",
+    "```py\n",
+    "    prop = ctrl.Properties  # 속성객체 복사\n",
+    "    prop.SetItem(\"속성명\", \"속성값\")  # 복사한 속성객체의 속성값 변경\n",
+    "    ctrl.Properties = prop  # 변경한 속성객체를 컨트롤에 대입\n",
+    "```\n",
+    "\n",
+    "\n",
+    "```py\n",
+    "for ctrl in hwp.ctrl_list:  # 모든 컨트롤을 순회하면서\n",
+    "    if ctrl.UserDesc == \"그림\":  # \"그림\"이면,\n",
+    "        prop = ctrl.Properties  # 속성을 복사한 후\n",
+    "        width = prop.Item(\"Width\")  # 기존 너비값 저장\n",
+    "        height = prop.Item(\"Height\")  # 기존 높이값 저장\n",
+    "        prop.SetItem(\"Width\", width * 0.5)  # Width * 0.5를 prop에 저장\n",
+    "        prop.SetItem(\"Height\", height * 0.5)  # Height * 0.5를 prop에 저장\n",
+    "        ctrl.Properties = prop  # 속성이 변경된 prop을 ctrl의 속성에 적용\n",
+    "\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "c0716fa6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "hwp.MoveDocBegin() \n",
+    "for ctrl in hwp.ctrl_list:  # 모든 컨트롤을 순회하면서\n",
+    "    if ctrl.UserDesc == \"그림\":  # \"그림\"이면,\n",
+    "        prop = ctrl.Properties  # 속성을 복사한 후\n",
+    "        width = prop.Item(\"Width\")  # 기존 너비값 저장\n",
+    "        height = prop.Item(\"Height\")  # 기존 높이값 저장\n",
+    "        prop.SetItem(\"Width\", width * 0.5)  # Width * 0.5를 prop에 저장\n",
+    "        prop.SetItem(\"Height\", height * 0.5)  # Height * 0.5를 prop에 저장\n",
+    "        ctrl.Properties = prop  # 속성이 변경된 prop을 ctrl의 속성에 적용\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2b418b2e",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dc59bd7f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "hwp.MoveDocBegin()\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"표\":\n",
+    "        prop = ctrl.Properties\n",
+    "        prop.SetItem(\"TreatAsChar\", True)\n",
+    "        ctrl.Properties = prop\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "59b51dba",
+   "metadata": {},
+   "source": [
+    "03-2 [실습] 표의 갯수 세어보기\n",
+    "\n",
+    "\n",
+    "hwp.ctrl_list는 문서 안에 들어있는 모든 컨트롤의 리스트를 실시간으로 조회할 수 있습니다.\n",
+    "\n",
+    "이번 챕터에서는 표 컨트롤의 갯수를 세는 간단한 기능을 직접 코딩해보겠습니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "a5ee807e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>시도</th>\n",
+       "      <th>시군구</th>\n",
+       "      <th>기관유형</th>\n",
+       "      <th>상위 보건기관명</th>\n",
+       "      <th>보건기관명</th>\n",
+       "      <th>주소</th>\n",
+       "      <th>읍면동명</th>\n",
+       "      <th>도서지역 여부</th>\n",
+       "      <th>대표 전화번호</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>서울특별시</td>\n",
+       "      <td>종로구</td>\n",
+       "      <td>보건소</td>\n",
+       "      <td>종로구보건소</td>\n",
+       "      <td>종로구보건소</td>\n",
+       "      <td>서울특별시 종로구 자하문로19길 36 (옥인동, 종로구보건소, 청운효자동자치회관) ...</td>\n",
+       "      <td>청운효자동</td>\n",
+       "      <td>아니오</td>\n",
+       "      <td>02-2148-3514</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>서울특별시</td>\n",
+       "      <td>중구</td>\n",
+       "      <td>보건소</td>\n",
+       "      <td>서울중구보건소</td>\n",
+       "      <td>서울중구보건소</td>\n",
+       "      <td>서울특별시 중구 다산로39길 16 (무학동, 중구보건소)</td>\n",
+       "      <td>신당동</td>\n",
+       "      <td>아니오</td>\n",
+       "      <td>02-3396-6302</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>서울특별시</td>\n",
+       "      <td>중구</td>\n",
+       "      <td>일반보건지소</td>\n",
+       "      <td>서울중구보건소</td>\n",
+       "      <td>약수보건지소</td>\n",
+       "      <td>서울특별시 중구 다산로 92 (신당동, 약수동주민센터) 약수동주민센터</td>\n",
+       "      <td>신당동</td>\n",
+       "      <td>아니오</td>\n",
+       "      <td>02-3396-6964</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>서울특별시</td>\n",
+       "      <td>중구</td>\n",
+       "      <td>일반보건지소</td>\n",
+       "      <td>서울중구보건소</td>\n",
+       "      <td>황학보건지소</td>\n",
+       "      <td>서울특별시 중구 난계로11길 52 (황학동, 황학동주민센터) 황학동주민센터</td>\n",
+       "      <td>황학동</td>\n",
+       "      <td>아니오</td>\n",
+       "      <td>02-3396-6989</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>서울특별시</td>\n",
+       "      <td>중구</td>\n",
+       "      <td>일반보건지소</td>\n",
+       "      <td>서울중구보건소</td>\n",
+       "      <td>다산보건지소</td>\n",
+       "      <td>서울특별시 중구 동호로15길 50 (신당동, 동사무소어린이집)</td>\n",
+       "      <td>신당동</td>\n",
+       "      <td>아니오</td>\n",
+       "      <td>02-3396-6959</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "      시도  시군구    기관유형 상위 보건기관명    보건기관명  \\\n",
+       "0  서울특별시  종로구     보건소   종로구보건소   종로구보건소   \n",
+       "1  서울특별시   중구     보건소  서울중구보건소  서울중구보건소   \n",
+       "2  서울특별시   중구  일반보건지소  서울중구보건소  약수보건지소    \n",
+       "3  서울특별시   중구  일반보건지소  서울중구보건소  황학보건지소    \n",
+       "4  서울특별시   중구  일반보건지소  서울중구보건소  다산보건지소    \n",
+       "\n",
+       "                                                  주소   읍면동명 도서지역 여부  \\\n",
+       "0  서울특별시 종로구 자하문로19길 36 (옥인동, 종로구보건소, 청운효자동자치회관) ...  청운효자동     아니오   \n",
+       "1                   서울특별시 중구 다산로39길 16 (무학동, 중구보건소)     신당동     아니오   \n",
+       "2             서울특별시 중구 다산로 92 (신당동, 약수동주민센터) 약수동주민센터    신당동     아니오   \n",
+       "3          서울특별시 중구 난계로11길 52 (황학동, 황학동주민센터) 황학동주민센터    황학동     아니오   \n",
+       "4                서울특별시 중구 동호로15길 50 (신당동, 동사무소어린이집)     신당동     아니오   \n",
+       "\n",
+       "        대표 전화번호  \n",
+       "0  02-2148-3514  \n",
+       "1  02-3396-6302  \n",
+       "2  02-3396-6964  \n",
+       "3  02-3396-6989  \n",
+       "4  02-3396-6959  "
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "df = pd.read_csv(\"보건복지부_전국 지역보건의료기관 현황_20221231.csv\", encoding=\"cp949\")\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "621a3fdb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "df = pd.read_csv(\"보건복지부_전국 지역보건의료기관 현황_20221231.csv\", encoding=\"cp949\")\n",
+    "df.head()\n",
+    "\n",
+    "hwp.SelectAll()\n",
+    "hwp.Copy()\n",
+    "for _ in range(len(df)):\n",
+    "    hwp.paste()\n",
+    "    \n",
+    "hwp.put_field_text(df)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ed3bc824",
+   "metadata": {},
+   "source": [
+    "for _ in range(len(df)):\n",
+    "hwp.paste()\n",
+    "\n",
+    "hwp.put_field_test(df)\n",
+    "이거 for 뒤에 _ 오는게 이해가 안돼 보통 i 같은거 넣지 않냐?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7f80ae6c",
+   "metadata": {},
+   "source": [
+    "\n",
+    "네, 아주 좋은 질문입니다!\n",
+    "\n",
+    "파이썬에서 `for i in range(len(df)):`처럼 `i`를 쓰면 반복 횟수만큼 0, 1, 2, ... 인덱스 값을 사용할 수 있습니다.  \n",
+    "하지만 **반복 횟수만 필요하고, 그 인덱스 값(i)을 코드에서 전혀 쓰지 않을 때**는  \n",
+    "慣例적으로 `_`(언더스코어)를 사용합니다.\n",
+    "\n",
+    "즉,  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fb9eccf6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for _ in range(len(df)):\n",
+    "    hwp.paste()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5fcfb85e",
+   "metadata": {},
+   "source": [
+    "여기서 `_`는 \"나는 이 값을 안 쓸 거야\"라는 의미로,  \n",
+    "실제로 반복문 안에서 인덱스 값이 필요 없으니 `_`로 적는 겁니다.\n",
+    "\n",
+    "- `for i in ...` : i 값을 쓸 때\n",
+    "- `for _ in ...` : 값이 필요 없을 때(단순 반복)\n",
+    "\n",
+    "파이썬에서 자주 쓰는 관용적 표현입니다!  \n",
+    "궁금한 점 더 있으면 언제든 질문해 주세요."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "20e4357f",
+   "metadata": {},
+   "source": [
+    "# 표의 갯수 세어보기\n",
+    "\n",
+    " \"찾기\" 특성상, 문서 어딘가의 문자열 중에 \"찾기\"가 포함되어 있는 경우 오차가 발생할 수 있어요.\n",
+    "\n",
+    "이런 경우에 hwp.ctrl_list를 활용해봅시다.\n",
+    "\n",
+    "코드는 간단합니다.\n",
+    "\n",
+    "\n",
+    "```py\n",
+    "\n",
+    "count = 0\n",
+    "for i in hwp.ctrl_list:\n",
+    "    if i.UserDesc == \"표\":\n",
+    "        count += 1\n",
+    "print(count)\n",
+    "\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "1e06f025",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "99\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "count = 0\n",
+    "for i in hwp.ctrl_list:\n",
+    "    if i.UserDesc == \"표\":\n",
+    "        count += 1\n",
+    "print(count)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "55bab29f",
+   "metadata": {},
+   "source": [
+    "아주 쉽게 설명하면 아래와 같습니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 코드 설명\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9c0d6f8b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in hwp.ctrl_list:\n",
+    "    if i.UserDesc == \"표\":\n",
+    "        count += 1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b730b6d2",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "#### 1. `for i in hwp.ctrl_list:`\n",
+    "- `hwp.ctrl_list`는 \"아래아한글 문서 안에 있는 모든 컨트롤(표, 그림 등)의 리스트\"입니다.\n",
+    "- 이 리스트 안에는 여러 개의 컨트롤 객체가 들어 있습니다.\n",
+    "- `for i in ...`는 그 리스트에서 하나씩 꺼내서 `i`에 담아 반복하겠다는 뜻입니다.\n",
+    "  - 즉, `i`는 컨트롤 객체(표, 그림 등 하나하나)를 의미합니다.\n",
+    "\n",
+    "#### 2. `if i.UserDesc == \"표\":`\n",
+    "- 각 컨트롤 객체(`i`)는 여러 정보를 가지고 있는데, 그 중 하나가 `UserDesc`라는 속성입니다.\n",
+    "- `UserDesc`는 그 컨트롤이 \"표\"인지, \"그림\"인지, \"텍스트상자\"인지 등 종류를 알려줍니다.\n",
+    "- 만약 `i.UserDesc`가 `\"표\"`라면, 즉 그 컨트롤이 표라면...\n",
+    "\n",
+    "#### 3. `count += 1`\n",
+    "- 표를 찾았으니 표의 개수를 하나 늘립니다.\n",
+    "\n",
+    "#### 4. `print(count)`\n",
+    "- 반복이 끝나면 표의 총 개수를 출력합니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 정리\n",
+    "- `i`는 `hwp.ctrl_list`에 들어있는 \"컨트롤 객체\" 하나하나를 의미합니다.\n",
+    "- `i.UserDesc`는 그 객체의 종류(표, 그림 등)를 알려주는 속성입니다.\n",
+    "- 그래서 `i.UserDesc == \"표\"`로 표만 골라서 개수를 셉니다.\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "77cc54e7",
+   "metadata": {},
+   "source": [
+    "아니 근데 보통 for문에서 i를 쓰면 숫자 늘리거나 하지 않아? for i in hwp.ctrl_list 가 어떻게 각 컨트롤 객체를 의미하는거냐"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "58c1e603",
+   "metadata": {},
+   "source": [
+    "좋은 질문입니다!  \n",
+    "파이썬의 for문은 \"리스트(또는 반복 가능한 것)\"에 대해 하나씩 꺼내서 반복합니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 1. 숫자 증가(for i in range(...))  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "46fadae9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in range(5):\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "71461bbf",
+   "metadata": {},
+   "source": [
+    "- 여기서 `i`는 0, 1, 2, 3, 4처럼 \"숫자\"가 하나씩 들어옵니다.\n",
+    "- `range(5)`가 [0, 1, 2, 3, 4]라는 숫자 리스트를 만들어주기 때문입니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 2. 리스트의 요소(for i in 리스트)  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d1f1fc96",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fruits = [\"사과\", \"바나나\", \"포도\"]\n",
+    "for i in fruits:\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4155d531",
+   "metadata": {},
+   "source": [
+    "- 여기서 `i`는 \"사과\", \"바나나\", \"포도\"가 차례로 들어옵니다.\n",
+    "- 즉, 리스트에 들어있는 \"각 요소\"가 하나씩 i에 들어가는 겁니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 3. 객체 리스트(for i in hwp.ctrl_list)  \n",
+    "- `hwp.ctrl_list`는 \"컨트롤 객체\"들이 들어있는 리스트입니다.\n",
+    "- 그래서 `for i in hwp.ctrl_list:`라고 하면,  \n",
+    "  리스트에 들어있는 \"컨트롤 객체\"가 하나씩 i에 들어가서 반복문이 실행됩니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "#### 결론  \n",
+    "- `for i in ...`에서 i는 \"리스트의 각 요소\"를 의미합니다.\n",
+    "- 그게 숫자일 수도 있고, 문자열일 수도 있고, 객체일 수도 있습니다.\n",
+    "- `hwp.ctrl_list`는 컨트롤 객체들의 리스트이기 때문에,  \n",
+    "  i가 각 컨트롤 객체가 되는 겁니다.\n",
+    "\n",
+    "---\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f428c8a0",
+   "metadata": {},
+   "source": [
+    "특정 조건을 가진 표의 갯수 세기"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "776e8a61",
+   "metadata": {},
+   "source": [
+    "몇 개의 표는 줄이 넘어가버려서 표가 길어져버렸습니다.\n",
+    "\n",
+    "![그림](https://wikidocs.net/images/page/261962/154.png)\n",
+    "\n",
+    "당장 자간을 줄여서 표를 고치고 싶은데, (이건 바로 다음 챕터에서 실습해보겠습니다.)\n",
+    "\n",
+    "이번 챕터에서는 주소 셀 때문에 높이가 틀어져버린 표의 갯수만 세어보고 마치겠습니다.\n",
+    "\n",
+    "\n",
+    "hwp의 길이단위 HwpUnit?\n",
+    "시작하기 전에, 아래아한글의 길이 단위인 HwpUnit에 대해 잠깐만 알아봅시다.\n",
+    "\n",
+    "아래아한글의 컨트롤은 너비나 높이를 표현하기 위해 HwpUnit이라는 단위를 사용하는데요.\n",
+    "\n",
+    "1 HwpUnit은 정확히 1/7200인치입니다. 1밀리미터는 약 283HwpUnit 이고요.\n",
+    "\n",
+    "암산으로 환산하기는 조금 복잡하죠?\n",
+    "\n",
+    "다행히 pyhwpx에서는\n",
+    "\n",
+    "```py\n",
+    "hwp.MiliToHwpUnit(), hwp.InchToHwpUnit(), hwp.PointToHwpUnit()\n",
+    "\n",
+    "hwp.HwpUnitToMili(), hwp.HwpUnitToInch(), hwp.HwpUnitToPoint() \n",
+    "\n",
+    "```\n",
+    "메서드를 제공하고 있고\n",
+    "\n",
+    "활용법을 알아두셔야 합니다.\n",
+    "\n",
+    "왜냐면, 프로그램에서는 대부분의 길이단위가 밀리미터로 표현되지만,\n",
+    "\n",
+    "실제로 프로그램 내부에서는 모두 HwpUnit으로 처리되기 때문입니다.\n",
+    "\n",
+    "특히 업무자동화를 할 때에는 이 부분이 두드러지게 됩니다.\n",
+    "\n",
+    "한/글 프로그램에서 첫 번째 표의 높이를 조회해보면 \n",
+    "\n",
+    "\n",
+    "\n",
+    "![그림](https://wikidocs.net/images/page/261962/%EB%85%B9%ED%99%94_2024_10_02_22_10_35_55.gif)\n",
+    "\n",
+    "\n",
+    "\n",
+    "표의 높이가 13.57mm인데요.\n",
+    "\n",
+    "Properties의 Height 정보를 보면,\n",
+    "\n",
+    "![그림](https://wikidocs.net/images/page/261962/%EB%85%B9%ED%99%94_2024_10_02_22_12_38_600.gif)\n",
+    "\n",
+    "3846 이라는 엉뚱한 숫자가 나옵니다.\n",
+    "\n",
+    "그럼 변환 메서드로 밀리미터로 환산해볼까요?\n",
+    "\n",
+    "![그림](https://wikidocs.net/images/page/261962/%EB%85%B9%ED%99%94_2024_10_02_22_13_50_330.gif)\n",
+    "\n",
+    "\n",
+    "13.5678이라는 숫자가 나오긴 했는데, 실제로는 13.57과 같습니다.\n",
+    "\n",
+    "정확히는 13.5678이 맞습니다. 아래아한글 프로그램에 소숫점 둘째자리까지만 보이는 것입니다.\n",
+    "\n",
+    "아래아한글에서는 소숫점 셋째자리 이하를 반올림해버리거든요.\n",
+    "\n",
+    "그래서 앞으로도 자동화를 하시다가 너비, 높이 등 길이를 다룰 때에는\n",
+    "\n",
+    "HwpUnit 단위의 숫자가 나올 때 놀라거나 혼동하지 마시고 차분하게 환산 메서드를 이용하시기 바랍니다.\n",
+    "\n",
+    "### 높이가 13.57mm를 넘는 표의 갯수\n",
+    "그럼 높이가 13.57mm를 넘는 표의 갯수를 세어보겠습니다.\n",
+    "\n",
+    "![그림](https://wikidocs.net/images/page/261962/%EB%85%B9%ED%99%94_2024_10_02_22_19_28_872.gif)\n",
+    "\n",
+    "```py\n",
+    "count = 0\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"표\" and ctrl.Properties.Item(\"Height\") > hwp.MiliToHwpUnit(13.57):\n",
+    "        count += 1\n",
+    "print(count)\n",
+    "```\n",
+    "\n",
+    "\n",
+    "짜잔! 단번에 43이라는 숫자가 나왔습니다.\n",
+    "\n",
+    "다음 챕터에서는 이 상태에서 바로 이어서\n",
+    "\n",
+    "줄이 넘어간 주소셀마다 찾아가 표가 원래 모양이 될 때까지 while문으로 자간을 좁히는 작업을 해보겠습니다.\n",
+    "\n",
+    "재미있겠죠?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4ada57db",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "\n",
+    "count = 0\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"표\" and ctrl.Properties.Item(\"Height\") > hwp.MiliToHwpUnit(13.57):\n",
+    "        count += 1\n",
+    "print(count)\n",
+    "\n",
+    "# hwp.ctrl_list = hwp, 즉 한글 객체에서 모든 컨트롤 가능한 요소들을 가져온다. \n",
+    "# for ctrl in hwp.ctrl_list: 그걸 ctrl이라는 변수에 하나씩 넣어서 순회한다.\n",
+    "# ctrl.UserDesc는 그 객체의 종류(표, 그림 등)를 알려주는 속성이다. \n",
+    "# 그래서 ctrl.UserDesc은 각 \"객체.userdesc\"의 값을 가져오는 것이다. \n",
+    "# 가져온 객체의 UserDesc가 \"표\"이면서 높이를 구했을 때 hwp.MiliToHwpUnit(13.57) 초과인 경우를 센다. \n",
+    "# hwp.MiliToHwpUnit(13.57) 은 밀리미터를 한글 단위로 변환하는 함수이다. 반대는 HwpUnitToMili이다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a4bd1410",
+   "metadata": {},
+   "source": [
+    "이번 챕터에서는 높이가 틀어져버린 모든 표의 주소 셀로 들어가서\n",
+    "\n",
+    "표 높이가 정상이 될 때까지 자간을 좁히는 반복작업을 자동화해보겠습니다.\n",
+    "\n",
+    "참고로 자간을 1 좁히는 명령어는 hwp.CharShapeSpacingDecrease()이고,\n",
+    "특정 자간으로 한 번에 조절하는 명령어는 hwp.set_font(Spacing=-50)입니다. (-50~50)\n",
+    "\n",
+    "\n",
+    "\n",
+    "hwp.ctrl_list를 활용해서\n",
+    "\n",
+    "\"표\" 컨트롤이면서 Height 속성값이 13.57을 넘는 표를 찾겠습니다.\n",
+    "\n",
+    "그리고 해당하는 표의 주소 셀을 선택해서,\n",
+    "\n",
+    "while문으로 표의 높이가 13.57이 될 때까지 자간을 줄이는 반복작업을 하려고 합니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8e7b7991",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"표\" and ctrl.Properties.Item(\"Height\") > hwp.MiliToHwpUnit(13.57):\n",
+    "\n",
+    "        # 해당 표의 A1 셀로 이동\n",
+    "        hwp.move_to_ctrl(ctrl)\n",
+    "        hwp.MoveRight()\n",
+    "\n",
+    "        # 주소 셀 선택\n",
+    "        hwp.TableColPageDown()\n",
+    "        hwp.TableColEnd()\n",
+    "        hwp.TableCellBlock()\n",
+    "\n",
+    "        # 높이가 20이 될 때까지 자간 줄이기\n",
+    "        while ctrl.Properties.Item(\"Height\") > hwp.MiliToHwpUnit(20):\n",
+    "            hwp.CharShapeSpacingDecrease()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "7c30044a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 미리 만들어놓았던 \"셀필드\"를 사용하면 훨씬 수월하게 작업할 수 있겠습니다.\n",
+    "\n",
+    "# 아래의 코드는 총 다섯 줄 밖에 아니지만 실행결과는 동일합니다.\n",
+    "\n",
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "i = 0\n",
+    "while hwp.move_to_field(\"주소\", i, select=True):  # ①\n",
+    "    while hwp.get_table_height(as_=\"mm\") > 19.5:  # ②\n",
+    "        hwp.CharShapeSpacingDecrease()\n",
+    "    i += 1\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6de87909",
+   "metadata": {},
+   "source": [
+    "① move_to_field를 while문에 넣을 수 있는 이유는 성공시 True, 실패시 False를 리턴하기 때문입니다.\n",
+    "존재하지 않는 인덱스의 \"주소\"필드로 이동하라는 명령을 실행하면\n",
+    "move_to_field가 False를 리턴하여 while문이 종료되는 방식입니다.\n",
+    "move_to_field 메서드는 필드명과 인덱스 외에도 세 가지 유용한 옵션을 사용할 수 있습니다.\n",
+    "text는 누름틀의 경우에만 쓰이는데, True로 지정하면 누름틀 내부 텍스트로 이동하고\n",
+    "False로 지정하면 누름틀 코드 앞으로 이동합니다.\n",
+    "start를 True로 하면 필드의 처음으로 이동하고, False로 지정하면 필드의 끝으로 이동합니다.\n",
+    "마지막으로 select는 필드 내용을 블록으로 선택할지(True), 단순히 커서만 옮길지(False) 정할 수 있습니다.\n",
+    "(select 파라미터는 방금 사용해보았죠.)\n",
+    "② hwp.get_table_height 메서드는 내부적으로 우리가 배웠던 Properties.Item(Height)을 조회합니다.\n",
+    "다만 as_라는 파라미터가 있어, 리턴 단위를 \"mm\", \"HwpUnit\", \"Point\" 및 \"Inch\" 중에서 정할 수 있습니다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "674f9004",
+   "metadata": {},
+   "source": [
+    "03-4 Properties의 아이템 목록 조회방법\n",
+    "\n",
+    "\n",
+    "지난 챕터에서는 표 컨트롤을 순회하면서 조작하는 방법을 알아보았는데요.\n",
+    "\n",
+    "그 과정에서 여러분 머릿속에 가장 큰 물음표가 생길 만한 부분은 역시\n",
+    "\n",
+    "\"Width\"나 \"Height\" 같은 속성명을 어떻게 조회할 수 있는지?\n",
+    "\n",
+    "일 거라고 생각합니다.\n",
+    "\n",
+    "(다른 궁금한 사항은 댓글을 남겨주세요 ㅜ)\n",
+    "\n",
+    "속성 리스트는 액션에 따라 제법 다양한 경우도 있기는 하지만,\n",
+    "\n",
+    "자동화에 자주 쓰이는 속성은 사실 그렇게 많지는 않습니다.\n",
+    "\n",
+    "근데 이걸 전부 외우기는 어렵기 때문에\n",
+    "\n",
+    "저도 매번 아래 세 가지 방법 중 하나로 조회하고 있습니다.\n",
+    "\n",
+    "① 한/글의 스크립트매크로 녹화로 확인(가장 폭넓게 활용할 수 있는 방식)\n",
+    "\n",
+    "② 공식문서 - ParameterSetObject.pdf 검색\n",
+    "\n",
+    "\n",
+    "③ hwp.HParameterSet으로 주피터노트북에서 확인 (최근 가장 많이 사용하는 방식)\n",
+    "\n",
+    "파라미터셋 사용법이 아주 생소하신 분은 ①스크립트매크로나 ②공식문서로 확인하는 게 가장 수월합니다.\n",
+    "\n",
+    "파라미터셋이 어느 정도 익숙한 상태에서 이름만 빠르게 확인하려는 경우에는 ③번을 쓰시면 됩니다.\n",
+    "\n",
+    "하나씩 알아보겠습니다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bd272e3d",
+   "metadata": {},
+   "source": [
+    "1. 한/글의 스크립트매크로 녹화로 속성명 확인하는 방법\n",
+    "예를 들어 문서 내 모든 표의 \"글자처럼 취급\" 속성을 해제하고 싶다고 가정해보겠습니다.\n",
+    "\n",
+    "① 표를 선택한 상태에서 Shift-Alt-H를 눌러 스크립트 녹화를 시작합니다.\n",
+    "\n",
+    "② 표 속성을 열어서 글자처럼 취급에 체크합니다.\n",
+    "\n",
+    "③ Shift-Alt-X를 눌러 스크립트 녹화를 종료합니다.\n",
+    "\n",
+    "④ Shift-Alt-L을 눌러 스크립트 목록을 열고 녹화한 스크립트를 편집합니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d6d9d267",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()\n",
+    "\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"표\":\n",
+    "        prop = ctrl.Properties\n",
+    "        prop.SetItem(\"TreatAsChar\", 0)\n",
+    "        ctrl.Properties = prop\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d5420dd1",
+   "metadata": {},
+   "source": [
+    "아주 쉽게 전체 구조와 작동 원리를 설명하고, 시각적으로도 이해할 수 있게 정리해드릴게요.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "## 1. 전체 코드 구조\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2485ae41",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 한글 프로그램과 연결\n",
+    "\n",
+    "for ctrl in hwp.ctrl_list:  # 문서의 모든 컨트롤(표, 그림 등) 하나씩 반복\n",
+    "    if ctrl.UserDesc == \"표\":  # 그 중에서 \"표\"만 골라서\n",
+    "        prop = ctrl.Properties  # 표의 속성(Property) 객체를 prop에 복사\n",
+    "        prop.SetItem(\"TreatAsChar\", 0)  # prop의 \"글자처럼 취급\" 속성을 0(해제)로 변경\n",
+    "        ctrl.Properties = prop  # 변경된 prop(속성 객체)를 다시 표에 적용"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "01fe71c8",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "---\n",
+    "\n",
+    "## 2. 작동 방식 시각화\n",
+    "\n",
+    "### (1) 한글 문서 구조\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1580a87f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hwp.ctrl_list = [표1, 그림1, 표2, 표3, ...]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "07ca24ed",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### (2) 반복문 동작\n",
+    "- 첫 번째 컨트롤(ctrl) → 표1\n",
+    "- 두 번째 컨트롤(ctrl) → 그림1 (건너뜀)\n",
+    "- 세 번째 컨트롤(ctrl) → 표2\n",
+    "- ...\n",
+    "\n",
+    "### (3) 표 컨트롤의 속성(Property) 구조\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6d062970",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ctrl(Properties) ──┬─ \"TreatAsChar\" : 1 (글자처럼 취급 O)\n",
+    "                   ├─ \"Height\" : 3846\n",
+    "                   └─ ... (다른 속성들)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "789c17aa",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### (4) 코드 흐름\n",
+    "1. **prop = ctrl.Properties**  \n",
+    "   → 표의 속성(Property) 객체를 prop에 복사  \n",
+    "2. **prop.SetItem(\"TreatAsChar\", 0)**  \n",
+    "   → prop의 \"TreatAsChar\" 값을 0으로 바꿈  \n",
+    "3. **ctrl.Properties = prop**  \n",
+    "   → 바뀐 prop(속성 객체 전체)을 표(ctrl)에 다시 적용  \n",
+    "   → 실제 한글 문서의 표 속성이 변경됨\n",
+    "\n",
+    "---\n",
+    "\n",
+    "## 3. 왜 이렇게 해야 할까?\n",
+    "\n",
+    "- 한글 API는 속성(Property) 객체를 \"복사해서 수정\"한 뒤,  \n",
+    "  다시 전체를 컨트롤에 덮어써야 실제로 반영됩니다.\n",
+    "- 즉,  \n",
+    "  1) 속성 객체를 꺼내서  \n",
+    "  2) 원하는 값을 바꾸고  \n",
+    "  3) 다시 집어넣는 방식입니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "## 4. 그림으로 요약\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8ac0b508",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "[표 컨트롤] ──> [속성(Property) 객체 복사] ──> [속성값 변경] ──> [다시 표에 적용]\n",
+    "      │                  │                          │                    │\n",
+    "      └─────> prop = ctrl.Properties ──> prop.SetItem(...) ──> ctrl.Properties = prop"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "11f77dbf",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 결론\n",
+    "- prop = ctrl.Properties : 표의 속성 전체를 복사\n",
+    "- prop.SetItem(...) : 복사한 속성 중 일부만 변경\n",
+    "- ctrl.Properties = prop : 바뀐 속성 전체를 표에 다시 적용(덮어쓰기)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "130a8505",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 한글 프로그램과 연결\n",
+    "\n",
+    "for ctrl in hwp.ctrl_list:  # 문서의 모든 컨트롤(표, 그림 등) 하나씩 반복\n",
+    "    if ctrl.UserDesc == \"표\":  # 그 중에서 \"표\"만 골라서\n",
+    "        ctrl.Properties.SetItem(\"TreatAsChar\", 0) \n",
+    "        \n",
+    "        \n",
+    "        #이런식으로 짜면 안되는거냐?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1584bca9",
+   "metadata": {},
+   "source": [
+    "좋은 질문입니다!\n",
+    "\n",
+    "### 결론부터 말하면:\n",
+    "- **이렇게만 하면 실제로 한글 문서의 표 속성이 바뀌지 않을 수 있습니다.**\n",
+    "- 이유는, `ctrl.Properties.SetItem(\"TreatAsChar\", 0)`로 속성 객체(prop)의 값을 바꿔도,  \n",
+    "  그 변경이 표(ctrl)에 \"자동 반영\"되지 않는 경우가 있기 때문입니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 왜 그런가?\n",
+    "- 한글 API(pyhwpx)는 속성(Property) 객체를 \"복사해서 수정\"한 뒤,\n",
+    "- **반드시 다시 `ctrl.Properties = prop`로 전체를 덮어써야**  \n",
+    "  실제 표에 변경이 적용됩니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 예시\n",
+    "#### (1) 잘 되는 경우 (권장)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b65f7109",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "prop = ctrl.Properties\n",
+    "prop.SetItem(\"TreatAsChar\", 0)\n",
+    "ctrl.Properties = prop  # 반드시 다시 할당!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "52814391",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "#### (2) 질문하신 방식 (문제 발생 가능)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3d611e27",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ctrl.Properties.SetItem(\"TreatAsChar\", 0)\n",
+    "# 이 줄만 있으면, 실제로 표에 적용이 안 될 수 있음!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f2b0b2ff",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 요약\n",
+    "- `ctrl.Properties.SetItem(...)`만 하면,  \n",
+    "  속성 객체(prop)만 바뀌고 표에는 적용이 안 될 수 있음.\n",
+    "- **반드시 `ctrl.Properties = prop`로 다시 할당해야 표에 적용됨.**\n",
+    "\n",
+    "---\n",
+    "\n",
+    "#### 실제로는 pyhwpx 내부 구현에 따라 다를 수 있지만,  \n",
+    "한글 자동화에서는 \"복사-수정-재할당\" 패턴이 가장 안전합니다!\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "01cf62a6",
+   "metadata": {},
+   "source": [
+    "2. 파라미터셋 문서에서 속성명 확인하는 방법\n",
+    "공식API문서는 [한컴 개발가이드](https://developer.hancom.com/hwpautomation)에서 다운로드하실 수 있습니다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "810eb2a3",
+   "metadata": {},
+   "source": [
+    "3. 주피터노트북에서 직접 속성명 확인하는 방법\n",
+    "\n",
+    "주피터노트북이나 파이참의 자동완성 기능을 활용하는 방법입니다.\n",
+    "\n",
+    "① ctrl.Properties.SetID를 출력해봅니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "763208e2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Table'"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 한글 프로그램과 연결\n",
+    "\n",
+    "hwp.CurSelectedCtrl.Properties.SetID"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bc90b5a6",
+   "metadata": {},
+   "source": [
+    "'Table'이라고 출력되었네요.\n",
+    "\n",
+    "② SetID 값 앞에 \"H\"를 붙이고, hwp.HParameterSet와 dir 함수로 속성 조회를 해봅니다.\n",
+    "\n",
+    "예를 들어 현재 선택한 컨트롤(표)의 SetID가 \"Table\"이면\n",
+    "\n",
+    "hwp.HParameterSet.HTable의 멤버를 dir 함수로 조회하는 겁니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "07dc6b3a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['AdjustPrevObjAttr', 'AdjustSelection', 'AdjustTextbox', 'AffectsLine', 'AllowOverlap', 'BorderFill', 'CLSID', 'Cell', 'CellMarginBottom', 'CellMarginLeft', 'CellMarginRight', 'CellMarginTop', 'CellSpacing', 'CreateItemArray', 'FlowWithText', 'HSet', 'Height', 'HeightRelTo', 'HoldAnchorObj', 'HorzAlign', 'HorzOffset', 'HorzRelTo', 'LayoutHeight', 'LayoutWidth', 'Lock', 'NumberingType', 'OutsideMarginBottom', 'OutsideMarginLeft', 'OutsideMarginRight', 'OutsideMarginTop', 'PageBreak', 'PageNumber', 'ProtectSize', 'RepeatHeader', 'TableBorderFill', 'TableCharInfo', 'TextFlow', 'TextWrap', 'TreatAsChar', 'VertAlign', 'VertOffset', 'VertRelTo', 'Width', 'WidthRelTo', '_ApplyTypes_', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattr__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_good_object_', '_get_good_single_object_', '_oleobj_', '_prop_map_get_', '_prop_map_put_', 'coclass_clsid']\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dir(hwp.HParameterSet.HTable))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "47a236a1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['CLSID', 'HActionCrossRef', 'HAddHanjaWord', 'HAppState', 'HAutoFill', 'HAutoNum', 'HBibliography', 'HBibliographyAll', 'HBibliographyName', 'HBlogAccount', 'HBlogUpload', 'HBookMark', 'HBorderFill', 'HBorderFillExt', 'HBrailleConvert', 'HBulletShape', 'HCCLMark', 'HCaption', 'HCaptureEnd', 'HCell', 'HCellBorderFill', 'HCertDRM', 'HChCompose', 'HChComposeShapes', 'HChangeRome', 'HChangeRomeUser', 'HCharShape', 'HChartObjShape', 'HCodeTable', 'HColDef', 'HCommPermission', 'HCompatibleDocument', 'HConvertCase', 'HConvertFullHalf', 'HConvertHiraToGata', 'HConvertJianFan', 'HConvertToHangul', 'HCtrlData', 'HDeleteCtrls', 'HDeletePage', 'HDocDRM', 'HDocData', 'HDocFilters', 'HDocFindInfo', 'HDocumentFilterDialog', 'HDocumentInfo', 'HDrawArcType', 'HDrawConnectLine', 'HDrawCoordInfo', 'HDrawCtrlHyperlink', 'HDrawEditDetail', 'HDrawFillAttr', 'HDrawImageAttr', 'HDrawImageScissoring', 'HDrawLayOut', 'HDrawLineAttr', 'HDrawObjTemplateSave', 'HDrawRectType', 'HDrawResize', 'HDrawRotate', 'HDrawScAction', 'HDrawShadow', 'HDrawShear', 'HDrawSoEquationOption', 'HDrawSoMouseOption', 'HDrawTextBox', 'HDrawTextart', 'HDrawVideoAttr', 'HDropCap', 'HDutmal', 'HEngineProperties', 'HEqEdit', 'HExchangeFootnoteEndNote', 'HFieldCtrl', 'HFileConvert', 'HFileInfo', 'HFileOpen', 'HFileOpenSave', 'HFileSaveAs', 'HFileSaveBlock', 'HFileSaveDaisy', 'HFileSecurity', 'HFileSendMail', 'HFileSetSecurity', 'HFileXMLSchema', 'HFindImagePath', 'HFindReplace', 'HFlashProperties', 'HFootnoteShape', 'HFormButtonAttr', 'HFormCharshapeattr', 'HFormComboboxAttr', 'HFormCommonAttr', 'HFormEditAttr', 'HFormGeneral', 'HFormListBoxAttr', 'HFormObjHanjaBusu', 'HFormObjHanjaMean', 'HFormObjInputCodeTable', 'HFormObjInputHanja', 'HFormObjInputIdiom', 'HFormScrollbarAttr', 'HFtpUpload', 'HGetText', 'HGotoE', 'HGridInfo', 'HHeaderFooter', 'HHncMessageBox', 'HHtmlPlusExport', 'HHyperLink', 'HHyperlinkJump', 'HIdiom', 'HIndexMark', 'HInputDateStyle', 'HInputHanja', 'HInputHanjaBusu', 'HInputHanjaMean', 'HInsertFieldTemplate', 'HInsertFile', 'HInsertText', 'HInternet', 'HKeyMacro', 'HLabel', 'HLinkDocument', 'HListParaPos', 'HListProperties', 'HLoadUserInfoFile', 'HLunarToSolar', 'HMailMergeGenerate', 'HMakeContents', 'HMarkpenShape', 'HMasterPage', 'HMemoShape', 'HMessageSet', 'HMetaData', 'HMousePos', 'HMovieProperties', 'HNumberingShape', 'HOleCreation', 'HPageBorderFill', 'HPageDef', 'HPageHiding', 'HPageNumCtrl', 'HPageNumPos', 'HParaShape', 'HPassword', 'HPasteHtml', 'HPictureChange', 'HPluginCreation', 'HPreference', 'HPresentation', 'HPresentationRange', 'HPrint', 'HPrintToImage', 'HPrintWatermark', 'HPrivateInfoSecurity', 'HPronounceInfo', 'HQCorrect', 'HRWPassword', 'HRangeTagShape', 'HRevisionDef', 'HSaveAsImage', 'HSaveFootnote', 'HSaveUserInfoFile', 'HScriptMacro', 'HScrollPosInfo', 'HSearchAddress', 'HSearchForeign', 'HSecDef', 'HSectionApply', 'HSectionMasterPage', 'HSelectionOpt', 'HShapeCopyPaste', 'HShapeGuideLine', 'HShapeObjComment', 'HShapeObjSaveAsPicture', 'HShapeObject', 'HShapeObjectCopyPaste', 'HSolarToLunar', 'HSort', 'HSpellingCheck', 'HStyle', 'HStyleDelete', 'HStyleItem', 'HStyleTemplate', 'HSum', 'HSummaryInfo', 'HTabDef', 'HTable', 'HTableBorderFill', 'HTableChartInfo', 'HTableCreation', 'HTableDeleteLine', 'HTableDrawPen', 'HTableInsertLine', 'HTableSplitCell', 'HTableStrToTbl', 'HTableSwap', 'HTableTblToStr', 'HTableTemplate', 'HTextCtrl', 'HTextVertical', 'HTrackChange', 'HTransTranslate', 'HUserQCommandFile', 'HVersionInfo', 'HVfsAuthentication', 'HViewProperties', 'HViewStatus', 'HXMLOpenSave', 'HXMLSchema', 'HXSecurity', '_ApplyTypes_', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattr__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_get_good_object_', '_get_good_single_object_', '_oleobj_', '_prop_map_get_', '_prop_map_put_', 'coclass_clsid']\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dir(hwp.HParameterSet))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d65fc51c",
+   "metadata": {},
+   "source": [
+    "파이썬에서 객체의 **속성(변수, 메서드 포함) 목록**을 확인하려면 `dir()` 함수를 사용하면 됩니다.\n",
+    "\n",
+    "예시:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a5527aa7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(dir(\"객체명\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "80cc8c00",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "아래는 pyhwpx에서 자주 쓰는 예시입니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 1. 컨트롤 객체의 속성/메서드 목록 보기\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "aaee3022",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ctrl = hwp.ctrl_list[0]\n",
+    "print(dir(ctrl))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4e24fcfe",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 2. Properties 객체의 속성/메서드 목록 보기\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ef1ac716",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "prop = ctrl.Properties\n",
+    "print(dir(prop))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "94faf474",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 3. 특정 파라미터셋의 속성명(필드명) 목록 보기\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a1f06703",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(dir(hwp.HParameterSet.HTable))  # 표 컨트롤의 속성명 목록"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b4004200",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 4. 객체의 실제 속성만 필터링해서 보기 (내장 메서드 제외)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3816ff71",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "attrs = [a for a in dir(ctrl) if not a.startswith('__')]\n",
+    "print(attrs)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1bcdcff7",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "---\n",
+    "\n",
+    "**요약:**  \n",
+    "- `dir(객체)`로 모든 속성/메서드 목록 확인  \n",
+    "- 리스트 컴프리헨션으로 내장 속성 제외 가능  \n",
+    "- pyhwpx의 Properties, HParameterSet 등에도 동일하게 사용\n",
+    "\n",
+    "궁금한 객체에 대해 위 코드를 실행하면 속성 목록을 쉽게 볼 수 있습니다!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "02938f58",
+   "metadata": {},
+   "source": [
+    "VS Code의 Jupyter 노트북에서 **출력(Output) 셀**이 옆으로 길어질 때 자동 줄바꿈(Word Wrap)을 적용하려면 아래 방법을 사용하세요.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 1. 출력 셀 자동 줄바꿈(Word Wrap) 설정 방법\n",
+    "\n",
+    "#### 방법 1: 출력 셀 우측 상단 메뉴\n",
+    "1. 출력 셀 오른쪽 위의 `...`(더보기) 버튼 클릭\n",
+    "2. `Word Wrap` 또는 `줄 바꿈` 메뉴 클릭  \n",
+    "   → 출력 내용이 자동으로 줄바꿈되어 세로로 표시됩니다.\n",
+    "\n",
+    "#### 방법 2: 전체 노트북에 기본 적용\n",
+    "1. VS Code 상단 메뉴에서 `파일 > 기본 설정 > 설정`(Ctrl + ,) 이동\n",
+    "2. 검색창에 `jupyter output word wrap` 입력\n",
+    "3. `Jupyter > Output: Word Wrap` 옵션을 체크  \n",
+    "   → 모든 노트북의 출력 셀에 자동 줄바꿈이 적용됩니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "### 2. 참고\n",
+    "- 이 설정은 **출력 셀**(print 결과, DataFrame 등)에만 적용됩니다.\n",
+    "- **코드 셀**은 별도로 `Alt + Z` 또는 셀 우측 상단 메뉴에서 줄바꿈을 설정해야 합니다.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "**요약:**  \n",
+    "- 출력 셀 우측 `...` 메뉴 → `Word Wrap`  \n",
+    "- 전체 적용: 설정에서 `Jupyter Output: Word Wrap` 체크\n",
+    "\n",
+    "이렇게 하면 출력이 옆으로 길어져도 자동으로 줄바꿈되어 스크롤 없이 볼 수 있습니다!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0aae4b32",
+   "metadata": {},
+   "source": [
+    "03-5 스크립트매크로 방식으로 컨트롤 속성 변경하기"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ac7b873b",
+   "metadata": {},
+   "source": [
+    "이번 챕터에서는 ctrl.Properties를 활용하는 대신\n",
+    "\n",
+    "스크립트매크로 코드로 대체하는 방법을 알려드리겠습니다.\n",
+    "\n",
+    "이 두 가지 방식의 실행결과는 동일하므로 편한 방식을 사용하면 되겠습니다.\n",
+    "\n",
+    "스크립트매크로 인터페이스는 무엇이 다른가?\n",
+    "제 경험상, 가장 빠르게 자동화코드를 짜는 방법은\n",
+    "\n",
+    "어떻게든 스크립트매크로 녹화를 최대한 활용하는 것입니다.\n",
+    "\n",
+    "이전 챕터에서 표의 TreatAsChar 속성을 변경하기 위해\n",
+    "\n",
+    "스크립트 매크로 녹화를 활용했는데요.\n",
+    "\n",
+    "사실 그 자체로도 아주 조금만 수정하면 파이썬에서 실행되는 코드이기 때문에\n",
+    "\n",
+    "굳이 ctrl.Properties와 SetItem으로 변경할 필요가 없습니다.\n",
+    "\n",
+    "1. 스크립트매크로 코드를 파이썬에서 활용하기\n",
+    "\n",
+    "문서 안의 모든 표의 \"글자처럼 취급\"을 해제하는 코드를\n",
+    "\n",
+    "스크립트매크로 방식으로 짜는 방법을 알려드리겠습니다.\n",
+    "\n",
+    "우선 문서 안에 임의의 표를 여러 개 만든 후\n",
+    "\n",
+    "첫 번째 표 하나만 가지고 \"글자처럼 취급\"을 끄는 스크립트매크로 녹화를 해봅니다.\n",
+    "\n",
+    "\n",
+    "\n",
+    "녹화한 코드는 아래와 같습니다.\n",
+    "\n",
+    "```py\n",
+    "function OnScriptMacro_중국어1성()\n",
+    "{\n",
+    "    FindCtrl();\n",
+    "    HAction.GetDefault(\"CellBorderFill\", HParameterSet.HCellBorderFill.HSet);\n",
+    "    with (HParameterSet.HCellBorderFill)\n",
+    "    {\n",
+    "        HSet.SetItem(\"ApplyTo\", 1);\n",
+    "    }\n",
+    "    HAction.Execute(\"CellBorderFill\", HParameterSet.HCellBorderFill.HSet);\n",
+    "    HAction.GetDefault(\"TablePropertyDialog\", HParameterSet.HShapeObject.HSet);\n",
+    "    with (HParameterSet.HShapeObject)\n",
+    "    {\n",
+    "        TreatAsChar = 0;\n",
+    "        HSet.SetItem(\"ShapeType\", 6);\n",
+    "    }\n",
+    "    HAction.Execute(\"TablePropertyDialog\", HParameterSet.HShapeObject.HSet);\n",
+    "}\n",
+    "```\n",
+    "녹화코드를 파이썬으로 자주 실행해보시면\n",
+    "\n",
+    "불필요한 코드를 식별하는 노하우가 생기는데,\n",
+    "\n",
+    "위의 코드에서도 마킹된 부분만 필요하고 나머지는 지워도 됩니다.\n",
+    "\n",
+    "위의 마킹된 부분을 파이썬 문법에 맞게 조금만 수정하면 아래처럼 되는데요.\n",
+    "\n",
+    "\n",
+    "\n",
+    "수정원칙은 크게 세 가지입니다.\n",
+    "① HAction이나 HParameterSet 등 파이썬에서 정의되지 않은 변수는 대부분 hwp의 멤버이므로\n",
+    "\n",
+    "hwp.을 붙여줘야 합니다. hwp.HAction, hwp.HParameterSet처럼요.\n",
+    "\n",
+    "② with문의 소괄호 안에 있는 코드를 그 바로 아래 중괄호 안의 모든 라인 앞에 붙여줘야 합니다.\n",
+    "\n",
+    "```py\n",
+    "# 기존\n",
+    "with (HParameterSet.HShapeObject)\n",
+    "    {\n",
+    "        TreatAsChar = 0;\n",
+    "        HSet.SetItem(\"ShapeType\", 6);  # 지워도 되는 라인\n",
+    "    }\n",
+    "\n",
+    "# 변경\n",
+    "hwp.HParameterSet.HShapeObject.TreatAsChar = 0\n",
+    "hwp.HParameterSet.HShapeObject.HSet.SetItem(\"ShapeType\", 6)  # 지워도 되는 코드\n",
+    "```\n",
+    "\n",
+    "③ 마지막으로, hwp.HParameterSet.HShapeObject가 계속 반복되고 있는데\n",
+    "\n",
+    "이 오브젝트를 pset이라는 변수로 코드라인 제일 위에 정의하겠습니다.\n",
+    "\n",
+    "그리고 필요없는 코드라인과 세미콜론은 모두 지워주시면 끝입니다.\n",
+    "\n",
+    "변환결과는 아래와 같습니다.\n",
+    "\n",
+    "```py\n",
+    "pset = hwp.HParameterSet.HShapeObject\n",
+    "hwp.HAction.GetDefault(\"TablePropertyDialog\", pset.HSet)\n",
+    "pset.TreatAsChar = 0\n",
+    "hwp.HAction.Execute(\"TablePropertyDialog\", pset.HSet)\n",
+    "```\n",
+    "\n",
+    "다른 표를 선택한 상태로 이 코드를 한 번 실행해보겠습니다.\n",
+    "\n",
+    "![](https://wikidocs.net/images/page/262482/%EB%85%B9%ED%99%94_2024_10_07_12_50_56_381.gif)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b2feffa5",
+   "metadata": {},
+   "source": [
+    "마치며\n",
+    "이번 챕터에서는 스크립트매크로 코드를 통해 컨트롤을 조작하는 방법을 보여드린 거지만,\n",
+    "\n",
+    "사실 스크립트매크로 변환방법은\n",
+    "\n",
+    "비단 컨트롤 속성 변경에만 쓰이는 하찮은 기능이 아닙니다.\n",
+    "\n",
+    "실은 아래아한글의 모든 동작(스크립트매크로로 녹화할 수 있는 것에 한해서)을\n",
+    "\n",
+    "파이썬 코드로 옮겨서 활용할 수 있는 방법이므로,\n",
+    "\n",
+    "이 한 가지 방식에만 익숙해지셔도\n",
+    "\n",
+    "거의 모든 아래아한글 액션을 파이썬 코드로 옮겨서 자동화하실 수 있습니다.\n",
+    "\n",
+    "만약 제게 파이썬-아래아한글 자동화 중 가장 중요한 한 가지를 고르라고 한다면\n",
+    "고민하지 않고, 스크립트매크로 녹화코드를 파이썬으로 옮기기라고 대답할 수 있을 만큼 활용도가 높은 기능입니다."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "32460ea7",
+   "metadata": {},
+   "source": [
+    "03-6 컨트롤을 선택하는 다양한 방법들\n",
+    "\n",
+    "\n",
+    "컨트롤을 선택하는 방법은 크게 세 가지입니다.\n",
+    "① `hwp.ctrl_list` 리스트를 통해 for문으로 순회하거나 혹은 직접 인덱싱해서 선택하기 (혹은 접근하기)\n",
+    "\n",
+    "② while문을 통해 `hwp.HeadCtrl`부터 Next로 순회하거나, `hwp.LastCtrl`부터 Prev로 순회하기\n",
+    "\n",
+    "③ 컨트롤에 접근한 후, `FindCtrl`()이나, `SelectCtrlFront()` 또는 `SelectCtrlReverse()` 로 컨트롤 선택하기\n",
+    "\n",
+    "아직은 이게 무슨 의미인지 잘 이해가 되지 않을 수도 있습니다.\n",
+    "\n",
+    "이미지 관련 자동화를 예로 들어서 하나씩 차근차근 설명드리겠습니다.\n",
+    "\n",
+    "1. `hwp.ctrl_list` 사용하기\n",
+    "\n",
+    "이전까지의 챕터에서 가장 많이 사용했던 기법이므로 어느 정도의 개념을 이해하셨을 거라고 생각합니다.\n",
+    "\n",
+    "아시다시피 한/글 문서에서 컨트롤을 생성 또는 삭제시 실시간으로 `hwp.ctrl_list`에 반영되는데요.\n",
+    "\n",
+    "이 ctrl_list를 활용하면 컨트롤들을 일괄변경할 수 있습니다.\n",
+    "\n",
+    "예를 들어 문서의 모든 이미지의 사이즈를 85%로 축소하는 작업이 필요하다고 가정하겠습니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "6963fddf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in range(2):\n",
+    "    hwp.insert_lorem(1)  # 아무 텍스트 삽입\n",
+    "    hwp.create_table(2,6)  # 2행6열 표 삽입\n",
+    "    while True:\n",
+    "        hwp.insert_random_picture()  # 랜덤이미지\n",
+    "        if not hwp.TableRightCell():\n",
+    "            break  # 모든 셀에 채우기\n",
+    "    hwp.MoveRight()  # 표 우측으로 나가서\n",
+    "    hwp.BreakPara()  # 줄바꿈\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "46c8c4ae",
+   "metadata": {},
+   "source": [
+    "표 안에 이미지가 총 24개 만들어졌는데요.\n",
+    "\n",
+    "우리가 할 일은 모든 이미지의 사이즈를 80%로 줄이고,\n",
+    "\n",
+    "각 그림 아래에 1, 2, 3, 4.. 인덱스를 써넣는 작업입니다.\n",
+    "\n",
+    "아래처럼 말예요."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "99462de0",
+   "metadata": {},
+   "source": [
+    "![](https://wikidocs.net/images/page/262625/166_.png)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "42b62bd8",
+   "metadata": {},
+   "source": [
+    "이 글을 쓰는 현재 제 주업은 일종의 아래아한글 보고서를 작성하는 일입니다.\n",
+    "수백페이지 분량의 초안을 작성하고 난 후에는 \"편집팀\"에 원고를 보내서 아주 아름답게 서식을 바꾸는데\n",
+    "삽입한 이미지의 소스(xls나 ai, dwg 등)를 같이 보내면서, 한/글 문서의 이미지 하단에는\n",
+    "소스를 식별할 수 있는 번호를 붙여줘야 하거든요. 지금 작업과도 비슷하지 않나요?\n",
+    "\n",
+    "작업을 시작해봅시다.\n",
+    "\n",
+    "절차를 알려드리면,\n",
+    "\n",
+    "① ctrl_list로 순회하면서 사이즈를 줄이고,\n",
+    "\n",
+    "② 커서를 해당 컨트롤로 옮겨서 줄바꿈 후 숫자 입력\n",
+    "\n",
+    "이렇게 두 단계입니다. 간단한 작업이네요.\n",
+    "\n",
+    "한 번 구현해보겠습니다.\n",
+    "\n",
+    "![](https://wikidocs.net/images/page/262625/%EB%85%B9%ED%99%94_2024_10_08_08_39_32_617.gif)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "08121bea",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "idx = 1\n",
+    "for ctrl in hwp.ctrl_list:\n",
+    "    if ctrl.UserDesc == \"그림\":\n",
+    "\n",
+    "        # 사이즈 줄이기\n",
+    "        prop = ctrl.Properties\n",
+    "        prop.SetItem(\"Width\", prop.Item(\"Width\") * 0.5)\n",
+    "        prop.SetItem(\"Height\", prop.Item(\"Height\") * 0.5)\n",
+    "        ctrl.Properties = prop\n",
+    "\n",
+    "        # 하단에 텍스트 삽입\n",
+    "        hwp.move_to_ctrl(ctrl)  # ☆컨트롤 앞으로 커서 이동\n",
+    "        hwp.ParagraphShapeAlignCenter()\n",
+    "        hwp.MoveRight()\n",
+    "        hwp.BreakPara()\n",
+    "        hwp.insert_text(idx)\n",
+    "        idx += 1\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "45f185ad",
+   "metadata": {},
+   "source": [
+    "이 방법을 꼭 배울 필요는 없습니다. hwp.ctrl_list로 충분히 모든 작업을 할 수 있으니까요.\n",
+    "\n",
+    "하지만, hwp.HeadCtrl로 순회하는 방법이 (미세하게나마) 가장 빠릅니다.\n",
+    "\n",
+    "그도 그럴 것이, hwp.ctrl_list를 호출할 때에 내부적으로 hwp.HeadCtrl.Next~를 통해서 리스트 요소를 만드는 과정이 포함되어 있습니다.\n",
+    "그러니까 컨트롤 요소가 많을수록 hwp.ctrl_list가 몇 배 느릴 수밖에 없죠.\n",
+    "\n",
+    "그리고 막상 익숙해지면 별로 불편하지도 않습니다.\n",
+    "\n",
+    "### **위와 동일한 예시를 hwp.HeadCtrl로 다시 한 번 만들어보겠습니다.**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "e957a648",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 우선 샘플문서 만들기\n",
+    "\n",
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "for i in range(1):\n",
+    "    hwp.insert_lorem(1)  # 아무 텍스트 삽입\n",
+    "    hwp.create_table(2,6)  # 2행6열 표 삽입\n",
+    "    while True:\n",
+    "        hwp.ParagraphShapeAlignCenter()\n",
+    "        hwp.insert_random_picture()  # 랜덤이미지\n",
+    "        if not hwp.TableRightCell():\n",
+    "            break  # 모든 셀에 채우기\n",
+    "    hwp.MoveRight()  # 표 우측으로 나가서\n",
+    "    hwp.BreakPara()  # 줄바꿈\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "82db3b5e",
+   "metadata": {},
+   "source": [
+    "![](https://wikidocs.net/images/page/262625/%EB%85%B9%ED%99%94_2024_10_09_23_13_06_439.gif)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "362dccf6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "for i in range(2):\n",
+    "    hwp.insert_lorem(1)  # 아무 텍스트 삽입\n",
+    "    hwp.create_table(2,6)  # 2행6열 표 삽입\n",
+    "    while True:\n",
+    "        # hwp.set_table_inside_margin(0,0,0,0)\n",
+    "        # hwp.TableCellAlignCenterCenter()  # 중앙-중앙 정렬 \n",
+    "        # 이 코드 두개 다 제대로 작동 안함. hwp.ParagraphShapeAlignCenter() 로 대체하여 사용\n",
+    "        hwp.ParagraphShapeAlignCenter()\n",
+    "        hwp.insert_random_picture()  # 랜덤이미지\n",
+    "        if not hwp.TableRightCell():\n",
+    "            break  # 모든 셀에 채우기\n",
+    "    hwp.MoveRight()  # 표 우측으로 나가서\n",
+    "    hwp.BreakPara()  # 줄바꿈"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "23775d17",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "idx = 1\n",
+    "ctrl = hwp.HeadCtrl\n",
+    "while ctrl:\n",
+    "    if ctrl.UserDesc == \"그림\":\n",
+    "\n",
+    "        # 사이즈 줄이기\n",
+    "        prop = ctrl.Properties\n",
+    "        prop.SetItem(\"Width\", prop.Item(\"Width\") * 0.8)\n",
+    "        prop.SetItem(\"Height\", prop.Item(\"Height\") * 0.8)\n",
+    "        ctrl.Properties = prop\n",
+    "\n",
+    "        # 하단에 텍스트 삽입\n",
+    "        hwp.move_to_ctrl(ctrl)  # ☆컨트롤 앞으로 커서 이동\n",
+    "        hwp.MoveRight()\n",
+    "        hwp.BreakPara()\n",
+    "        hwp.insert_text(idx)  \n",
+    "        idx += 1\n",
+    "    ctrl = ctrl.Next\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7e440dbf",
+   "metadata": {},
+   "source": [
+    " ```py\n",
+    " @property\n",
+    "    def HeadCtrl(self):\n",
+    "        \"\"\"\n",
+    "        문서의 첫 번째 컨트롤을 리턴한다.\n",
+    "        거의 모든 경우 HeadCtrl은 구역 정의(Section Definition, secd)를 리턴한다.\n",
+    "        사용법은 아래와 같다.\n",
+    "\n",
+    "        >>> # 문서에 첫 번째로 삽입된 표의 컨트롤을 탐색하여 선택하는 방법\n",
+    "        >>> from pyhwpx import Hwp\n",
+    "        >>> hwp = Hwp()\n",
+    "        >>> ctrl = hwp.HeadCtrl\n",
+    "        >>> while True:\n",
+    "        >>>     if ctrl.UserDesc == \"표\":\n",
+    "        >>>         break\n",
+    "        >>>     ctrl = ctrl.Next\n",
+    "        >>> print(\"표가 선택되었습니다.\")\n",
+    "        \"\"\"\n",
+    "        return self.hwp.HeadCtrl\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8dd2cb6e",
+   "metadata": {},
+   "source": [
+    "<p>그럼 컨트롤 선택방법 중 마지막인 <strong>직접선택</strong>에 대해 알아봅시다.</p>\n",
+    "<h2 id=\"3\">3. 컨트롤 직접 선택하기</h2>\n",
+    "<p>이것도 많이 쓰이는 방법인데요.</p>\n",
+    "<p>간단한 예시를 들어볼게요.</p>\n",
+    "\n",
+    "\n",
+    "<p>우리가 작성해놓은 샘플문서의 표에 들어가서</p>\n",
+    "<p>2행에 있는 이미지들만 전부 삭제하는 작업을 해야 해요. 문자열은 그대로 두고요.</p>\n",
+    "<p>어떻게 구현해야 할지 짐작이 가나요?</p>\n",
+    "<p>이런 작업에는 우리가 지금부터 배울 <strong>\"컨트롤 직접선택\"</strong> 방법을 쓰면 간단히 해결돼요.</p>\n",
+    "<p>기본적인 사용법을 설명해드릴게요.</p>\n",
+    "<p>우선 커서 근처에 있는 컨트롤을 선택하는 명령어가 세 개 있어요.</p>\n",
+    "<p>① <code>hwp.FindCtrl()</code> : 커서 우측의 컨트롤을 선택. 없으면 hwp.SelectCtrlReverse()와 동일(CtrlID 리턴)</p>\n",
+    "<p>② <code>hwp.SelectCtrlFront()</code> : 커서 우측 또는 문서 하단 방향으로 가장 가까운 컨트롤을 선택(True/False 리턴)</p>\n",
+    "<p>③ <code>hwp.SelectCtrlReverse()</code> : 커서 좌측 또는 문서 상단 방향으로 가장 가까운 컨트롤을 선택(True/False 리턴)</p>\n",
+    "<p>이 중에 제가 많이 사용하는 메서드는 <code>hwp.FindCtrl()</code>과 <code>hwp.SelectCtrlFront()</code>인데요.</p>\n",
+    "\n",
+    "\n",
+    "<p>둘의 특징이 미묘하게 달라요. 그 중에서도 가장 중요한 차이는 셀 안에 있을 때인데요.</p>\n",
+    "<p><code>hwp.FindCtrl()</code>은 셀 안에 컨트롤이 없을 때에는 아무것도 선택하지 않고 빈 문자열을 리턴하지만</p>\n",
+    "<p><code>hwp.SelectCtrlFront()</code>는 셀 안에 컨트롤이 없을 때에는 상위컨트롤(표)을 선택해요.</p>\n",
+    "<p>작업에 따라 적절한 메서드를 고르셔야 해요.</p>\n",
+    "<p>예를 들어 현재 커서가 A1 셀(이미지 좌측)에 있는 경우</p>\n",
+    "<p><code>hwp.SelectCtrlFront()</code>를 실행하면,</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/262625/%EB%85%B9%ED%99%94_2024_10_10_00_18_26_331.gif\"/></p>\n",
+    "<p>짜잔! 이미지가 잘 선택됐지만, 만약 이미지가 없는 셀이라면?</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/262625/%EB%85%B9%ED%99%94_2024_10_10_00_29_49_821.gif\"/></p>\n",
+    "<p>이렇게 상위컨트롤을 선택해버리게 돼요.</p>\n",
+    "<div class=\"dynamic-ad\" style=\"margin: 30px 0;\">\n",
+    "<script async=\"\" crossorigin=\"anonymous\" src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9470517771012578\"></script>\n",
+    "<!-- 위키독스_데스크탑_본문_300x250 -->\n",
+    "<ins class=\"adsbygoogle\" data-ad-client=\"ca-pub-9470517771012578\" data-ad-slot=\"1227190832\" style=\"display:inline-block;width:300px;height:250px\"></ins>\n",
+    "<script>\n",
+    "                        (adsbygoogle = window.adsbygoogle || []).push({});\n",
+    "                    </script>\n",
+    "</div>\n",
+    "\n",
+    "<p>그럼 본론으로 돌아와서, 모든 표 2행의 이미지만 삭제하는 코드를 같이 작성해볼게요.</p>\n",
+    "<p>(정답을 미리 보지 마시고, 직접 한 번 도전해보시겠어요? 삭제 명령어는 컨트롤 선택 후 <code>hwp.Delete()</code>예요.)</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/262625/%EB%85%B9%ED%99%94_2024_10_10_00_39_04_982.gif\"/></p>\n",
+    "<pre><code class=\"language-python\">n = 0\n",
+    "while hwp.get_into_nth_table(n):\n",
+    "    hwp.TableLowerCell()\n",
+    "    while True:\n",
+    "        hwp.FindCtrl()  # 컨트롤 선택\n",
+    "        if [[MARK]]hwp.CurSelectedCtrl[[/MARK]].UserDesc == \"그림\":\n",
+    "            hwp.Delete()  # 그림 삭제\n",
+    "            hwp.Delete()  # 남은 줄바꿈 삭제\n",
+    "        if not hwp.TableRightCell():\n",
+    "            n += 1\n",
+    "            break\n",
+    "</code></pre>\n",
+    "<blockquote>\n",
+    "<p>위에서 마킹된 <code>hwp.CurSelectedCtrl</code>은 현재 선택한 컨트롤을 리턴해주는 아주 유용한 속성이에요.<br/>\n",
+    "이밖에도 <code>hwp.move_to_ctrl(ctrl)</code>이나, <code>hwp.select_ctrl(ctrl)</code> 등의 컨트롤 관련 메서드가 있어요.</p>\n",
+    "</blockquote>\n",
+    "<p>어때요? 생각하셨던 프로세스와 비슷했나요?</p>\n",
+    "<p>3장에서 다루는 컨트롤 관련 기능들은</p>\n",
+    "<p>업무자동화를 할 때 정말 많이 쓰이더라고요.</p>\n",
+    "<p>여러분도 '아, 이러이런 작업들이 코드로 가능하겠구나!' 하고 상상력을 총동원하셔서</p>\n",
+    "<p>여러분 업무에 잘 활용하시면 좋겠습니다.</p>\n",
+    "<h2 id=\"3_1\">3장을 마치며</h2>\n",
+    "<p>2장의 필드 사용법과 3장의 컨트롤 사용법 두 가지는</p>\n",
+    "<p>행정업무 자동화에 정말 많이 쓰이기도 하고,</p>\n",
+    "<p>사실 이 두 가지로 대부분의 문제를 해결할 수 있더라고요.</p>\n",
+    "<p>4장부터는 좀 더 구체적인 예제들을 조금씩 다뤄보려고 해요.</p>\n",
+    "<p>혹시 이 글을 읽으시면서, '이런 작업도 가능할까?' 하고 생각나는 케이스가 있다면</p>\n",
+    "<p>언제든 자유롭게 댓글로 문의 남겨주시면, 다음 챕터에서 다뤄드릴게요.</p>\n",
+    "<p>그럼 3장은 여기서 마치겠습니다. 수고하셨습니다!</p>\n",
+    "    \n",
+    "</div>\n",
+    "<div class=\"muted text-right\" style=\"font-size: 0.9em;margin:10px 0;\">"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a24d719b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "n = 0\n",
+    "while hwp.get_into_nth_table(n):\n",
+    "    hwp.TableLowerCell()\n",
+    "    while True:\n",
+    "        hwp.FindCtrl()  # 컨트롤 선택\n",
+    "        if hwp.CurSelectedCtrl.UserDesc == \"그림\":\n",
+    "            hwp.Delete()  # 그림 삭제\n",
+    "            hwp.Delete()  # 남은 줄바꿈 삭제\n",
+    "        if not hwp.TableRightCell():\n",
+    "            n += 1\n",
+    "            break"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e29ab4e5",
+   "metadata": {},
+   "source": [
+    "<div class=\"page-content tex2jax_process\">\n",
+    "    \n",
+    "    \n",
+    "        \n",
+    "        <p>아래아한글의 가장 뛰어난 점 중 하나는</p>\n",
+    "<p>출판 수준의 굉장히 자유로운 서식이라고 할 수 있습니다.</p>\n",
+    "<p>그리고 서식 관련한 모든 기능은 코드로 변경할 수 있기 때문에</p>\n",
+    "<p>내부 구조를 아주 조금만 이해하면</p>\n",
+    "<p>어떤 방식으로 코드를 짜야 하는지 이해하실 수 있게 됩니다.</p>\n",
+    "<p>처음부터 단축메서드를 소개해드리기보다는,</p>\n",
+    "<p>기본적인 API 사용법부터 차근차근 알려드리겠습니다.</p>\n",
+    "<h2 id=\"1-hwpcharshape\">1. <code>hwp.CharShape</code></h2>\n",
+    "<p>우선 한/글을 열고 간단한 아무 문장을 하나 작성해봅시다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/449.png\"/></p>\n",
+    "<p>한/글에서는 너무 당연한 이야기지만</p>\n",
+    "<p>글자 모양을 변경하기 위해서는, <strong>변경할 영역을 먼저 선택</strong>해야 하죠.</p>\n",
+    "<p>1장에서 알려드린 Move 관련 명령어 중 <code>hwp.MoveSelParaEnd()</code>를 통해 </p>\n",
+    "<p>문단 끝까지 선택하겠습니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_22_46_21_559.gif\"/></p>\n",
+    "<p>선택 영역의 글자모양 정보를 지니고 있는 개체는 <code>hwp.CharShape</code>입니다.</p>\n",
+    "<blockquote>\n",
+    "<p><code>CharShape</code>은 선택상태가 아니어도, 커서위치의 글자정보를 지니고 있습니다.</p>\n",
+    "</blockquote>\n",
+    "<p>현재 선택영역의 크기를 조회하는 방법은 <code>hwp.CharShape.Item(\"Height\")</code>입니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_22_49_41_253.gif\"/></p>\n",
+    "<p><code>1,000</code>이라는 값이 나왔네요. '왜 10이 아닐까?' 생각하신 분은</p>\n",
+    "<p>이전 장에서 HwpUnit에 대해 언급했던 부분을 상기해주시기 바랍니다.</p>\n",
+    "\n",
+    "\n",
+    "<p>(100HwpUnit이 1포인트입니다.)</p>\n",
+    "<p>차근차근 이 책을 읽어오셨다면, 뭔가 \"익숙하다\"는 걸 느끼셨을 겁니다.</p>\n",
+    "<p>표나 그림의 Properties와 굉장히 유사한 인터페이스인데요.</p>\n",
+    "<p>① <code>Item</code>으로 특정 속성을 조회할 수 있고, </p>\n",
+    "<p>② <code>prop</code> 생성 후 <code>SetItem</code>으로 변경한 속성을 다시 CharShape에 대입하여</p>\n",
+    "<p>특정 속성들을 변경할 수 있습니다.</p>\n",
+    "<p>선택영역의 글자크기를 20pt(포인트)로, 그리고 이탤릭체로 변경해보겠습니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_22_56_21_806.gif\"/></p>\n",
+    "<pre><code class=\"language-python\">prop = hwp.CharShape  # 속성 개체 생성\n",
+    "prop.SetItem(\"Height\", 2000)  # 글자크기는 20pt로\n",
+    "prop.SetItem(\"Italic\", True)  # 이탤릭\n",
+    "hwp.CharShape = prop  # 변경된 속성 적용\n",
+    "</code></pre>\n",
+    "<p>Height와 Italic 외에도 아래와 같은 속성들이 있습니다.</p>\n",
+    "<p>(<code>dir(hwp.HParameterSet.HCharShape)</code>로 조회하거나, 파라미터셋 문서를 검색하시면 됩니다.)</p>\n",
+    "<pre><code>\"Bold\" # 진하게(True/False)\n",
+    "\"DiacSymMark\" # 강조점(0~12)\n",
+    "\"Emboss\" # 양각(True/False)\n",
+    "\"Engrave\" # 음각(True/False)\n",
+    "\"FaceName\" # 서체(str)\n",
+    "\"FontType\" # (TTF), 2(HTF)\n",
+    "\"Height\" # 글자크기(pt, 0.1 ~ 4096)\n",
+    "\"Italic\" # 이탤릭(True/False)\n",
+    "\"Offset\" # 글자위치-상하오프셋(-100 ~ 100)\n",
+    "\"OutLineType\" # 외곽선타입(0~6)\n",
+    "\"Ratio\" # 장평(50~200)\n",
+    "\"ShadeColor\" # 음영색(RGB, 0x000000 ~ 0xffffff) ~= hwp.rgb_color(255,255,255), 취소는 0xffffffff(4294967295)\n",
+    "\"ShadowColor\" # 그림자색(RGB, 0x0~0xffffff) ~= hwp.rgb_color(255,255,255), 취소는 0xffffffff(4294967295)\n",
+    "\"ShadowOffsetX\" # 그림자 X오프셋(-100 ~ 100)\n",
+    "\"ShadowOffsetY\" # 그림자 Y오프셋(-100 ~ 100)\n",
+    "\"ShadowType\" # 그림자 유형(0: 없음, 1: 비연속, 2:연속)\n",
+    "\"Size\" # 글자크기 축소확대%(10~250)\n",
+    "\"SmallCaps\" # 강조점\n",
+    "\"Spacing\" # 자간(-50 ~ 50)\n",
+    "\"StrikeOutColor\" # \n",
+    "\"\"\"\"\"\"# # GB, 0x0~0xffffff) ~= hwp.rgb_color(255,255,255), 취소는 0xffffffff(4294967295)\n",
+    "\"StrikeOutShape\" # 취소선 모양(0~12, 0이 일반 취소선)\n",
+    "\"StrikeOutType\" # 취소선 유무(True/False)\n",
+    "\"SubScript\" # 아래첨자(True/False)\n",
+    "\"SuperScript\" # 위첨자(True/False)\n",
+    "\"TextColor\" # 글자색(RGB, 0x0~0xffffff) ~= hwp.rgb_color(255,255,255), 기본값은 0xffffffff(4294967295)\n",
+    "\"UnderlineColor\" # 밑줄색(RGB, 0x0~0xffffff) ~= hwp.rgb_color(255,255,255), 기본값은 0xffffffff(4294967295)\n",
+    "\"UnderlineShape\" # 밑줄형태(0~12)\n",
+    "\"UnderlineType\" # 밑줄위치(0:없음, 1:하단, 3:상단)\n",
+    "\"UseFontSpace\" # 글꼴에 어울리는 빈칸(True/False)\n",
+    "</code></pre>\n",
+    "<p>굉장히 많네요.</p>\n",
+    "<p>대부분 정수 또는 True/False로 설정할 수 있는 아이템들입니다.</p>\n",
+    "<p>밑줄 속성 하나만 같이 연습해봅시다.</p>\n",
+    "<p>\"선택영역의 글자 위에 빨간색 이중실선 그리기\" 같은 건 어떻게 적용할 수 있을까요?</p>\n",
+    "<p>(저도 이걸 다 외우지 못하기 때문에, 보여드리기 전에 막 이것저것 넣어보고 있습니다ㅜ)</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_23_12_26_194.gif\"/></p>\n",
+    "<pre><code class=\"language-python\">prop = hwp.CharShape\n",
+    "prop.SetItem(\"UnderlineShape\", 7)\n",
+    "prop.SetItem(\"UnderlineType\", 3)\n",
+    "prop.SetItem(\"UnderlineColor\", hwp.rgb_color(\"Red\"))\n",
+    "hwp.CharShape = prop\n",
+    "</code></pre>\n",
+    "<p>이렇게 실행하니까 적용이 되네요ㅎ</p>\n",
+    "<p><code>hwp.CharShape</code> 속성에 대해 조금씩 익숙해지는 느낌이 생기나요?</p>\n",
+    "<h2 id=\"hwpset_font\"><code>hwp.set_font</code> 단축메서드</h2>\n",
+    "<p><code>hwp.set_font</code>는 이런 기능을 좀 더 간결하게 코딩할 수 있게 만들어놓은 pyhwpx의 단축메서드입니다.</p>\n",
+    "\n",
+    "<p>위에서 적용했던 모든 코드는 </p>\n",
+    "<p>아래와 같은 방식으로 한 번에 실행하실 수 있습니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_23_20_00_181.gif\"/></p>\n",
+    "<pre><code class=\"language-python\">hwp.set_font(\n",
+    "    Height=20,\n",
+    "    UnderlineShape=7,\n",
+    "    UnderlineType=3,\n",
+    "    UnderlineColor=hwp.rgb_color(\"Red\"),\n",
+    "    Italic=True)\n",
+    "</code></pre>\n",
+    "<p>모든 속성을 일일이 보여드릴 수는 없지만, </p>\n",
+    "<p>hwp.CharShape이나 hwp.set_font 메서드를 활용하시면</p>\n",
+    "<p>글자모양을 조회하거나 수정하는 기능을 간편하게 코드로 작성하실 수 있습니다.</p>\n",
+    "<blockquote>\n",
+    "<p><code>hwp.set_font</code>에 구현해 두지 않은 속성이 하나 있는데요. <strong>BorderFill</strong> 입니다.<br/>\n",
+    "또 하나의 파라미터셋을 내포해야 하기 때문에 구현 및 실행이 까다로울뿐더러<br/>\n",
+    "고생해서 만들어도 잘 쓰이지 않을 기능이라고 판단하였습니다ㅜ<br/>\n",
+    "만약 BorderFill을 코드로 작성하셔야 하는 경우라면, 간단히 스크립트매크로를 활용하시면 됩니다.</p>\n",
+    "</blockquote>\n",
+    "<p>그럼 이번 챕터 마지막으로 </p>\n",
+    "<p>아래아한글의 굉장히 유용한 기능 중 하나인 \"모양 복사\" 기능을 코드로 실행해보고 마치겠습니다.</p>\n",
+    "<h2 id=\"hwpshape_copy_paste\"><code>hwp.shape_copy_paste</code> : 모양 복사</h2>\n",
+    "<p>한/글에서 <code>Alt-c</code> 단축키로 실행할 수 있는 모양 복사는</p>\n",
+    "<p>실행방법이 원래 좀 특이한데요.</p>\n",
+    "<p>선택상태가 아닐 때 Alt-c를 누르면 모양 복사가 되고,</p>\n",
+    "<p>선택상태에서 Alt-c를 누르면 모양 붙여넣기가 되는 재미있는 기능입니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_15_23_46_00_316.gif\"/></p>\n",
+    "<p>모양 복사가 업무자동화에 자주 쓰이는 기능은 아니지만</p>\n",
+    "<p>아주 유용하게 쓰이는 경우가 하나 있는데,</p>\n",
+    "<p>\"글자모양과 문단모양은 유지하면서 스타일은 모두 바탕글로 변경하고 싶을 때\"입니다.</p>\n",
+    "<p>이번 장 마지막에 실습으로 한 번 진행해봅시다.</p>\n",
+    "<p>우선 모양복붙 메서드인 <code>hwp.shape_copy_paste()</code>를 가지고 간단히 연습을 해보겠습니다.</p>\n",
+    "<div class=\"dynamic-ad\" style=\"margin: 30px 0;\">\n",
+    "<script async=\"\" crossorigin=\"anonymous\" src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9470517771012578\"></script>\n",
+    "<!-- 위키독스_데스크탑_본문_300x250 -->\n",
+    "<ins class=\"adsbygoogle\" data-ad-client=\"ca-pub-9470517771012578\" data-ad-slot=\"1227190832\" style=\"display:inline-block;width:300px;height:250px\"></ins>\n",
+    "<script>\n",
+    "                        (adsbygoogle = window.adsbygoogle || []).push({});\n",
+    "                    </script>\n",
+    "</div>\n",
+    "\n",
+    "<p>첫 번째 문단은 서식 그대로 두고</p>\n",
+    "<p>줄바꿈을 한 뒤 함초롱바탕 10포인트 기본 서체로 동일한 글자를 적어 두었습니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/450.png\"/></p>\n",
+    "<p>pos 0,0,0(본문 첫 문단 첫 글자 앞)에서 복사해서, </p>\n",
+    "<p>pos 2,0,0 ~ 문단 끝까지 선택하고 모양붙여넣기를 해보겠습니다.</p>\n",
+    "<p><img alt=\"\" src=\"https://wikidocs.net/images/page/263875/%EB%85%B9%ED%99%94_2024_10_16_00_11_06_931.gif\"/></p>\n",
+    "<pre><code class=\"language-python\">hwp.set_pos(0,0,0)  # 본문 첫 문단 첫 글자 앞으로 이동\n",
+    "hwp.shape_copy_paste()  # 모양 복사\n",
+    "\n",
+    "hwp.select_text(2,0,2,-1)  # 2번문단 첫글자 앞에서 2번문단 마지막까지 선택\n",
+    "hwp.shape_copy_paste()  # 모양 붙여넣기\n",
+    "hwp.Cancel()  # 선택 취소\n",
+    "</code></pre>\n",
+    "<blockquote>\n",
+    "<p>모양 복사는 자칫 <code>클립보드를 사용하는 기능</code>으로 오해할 수 있지만<br/>\n",
+    "클립보드를 사용하지 않는 기능입니다. 복사 붙여넣기와 함께 사용하실 수 있습니다.</p>\n",
+    "</blockquote>\n",
+    "<h2 id=\"_1\">마치며</h2>\n",
+    "<p>이번 챕터에서는 글자모양 변경 관련한 몇 가지 메서드를 알아보았습니다.</p>\n",
+    "<p>글을 작성하기 전에 set_font로 설정한 후 글을 작성하거나,</p>\n",
+    "<p>작성되어 있는 글을 어떤 방식으로든 선택한 후 set_font를 실행하는 방식 등</p>\n",
+    "<p>자동화 구현방법은 다양한 패턴이 있지만,</p>\n",
+    "<p>메서드 자체의 사용법은 굉장히 간단하므로</p>\n",
+    "<p>여러분의 작은 업무에서부터 조금씩 적용해보시기를 바랍니다.</p>\n",
+    "<p>그럼 다음 챕터에서는 문단 모양을 코드로 조회하고 변경하는 방법에 대해 알려드리겠습니다.</p>\n",
+    "<h2 id=\"pyhwpx\">글자모양 관련한 짧은 pyhwpx 명령어들</h2>\n",
+    "<p>아래 나열된 명령어들은</p>\n",
+    "<p>아래아한글의 단축키와 매핑되어 있는 간편기능들입니다.</p>\n",
+    "<pre><code class=\"language-python\">hwp.CharShapeBold()  # 글자 굵게(토글)\n",
+    "hwp.CharShapeItalic()  # 글자 이탤릭(토글)\n",
+    "hwp.CharShapeShadow()  # 그림자(토글)\n",
+    "hwp.CharShapeUnderline()  # 밑줄(토글)\n",
+    "hwp.CharShapeCenterline()  # 취소선(토글)\n",
+    "hwp.CharShapeEmboss()  # 양각(토글)\n",
+    "hwp.CharShapeEngrave()  # 음각(토글)\n",
+    "hwp.CharShapeOutline()  # 외곽선(토글)\n",
+    "hwp.CharShapeSubscript()  # 아래첨자(토글)\n",
+    "hwp.CharShapeSuperscript()  # 위첨자(토글)\n",
+    "hwp.CharShapeSuperSubscript()  # 위첨자/아래첨자/일반(토글)\n",
+    "\n",
+    "hwp.CharShapeSpacingIncrease()  # 자간 1 늘이기\n",
+    "hwp.CharShapeSpacingDecrease()  # 자간 1 줄이기\n",
+    "\n",
+    "hwp.CharShapeWidthIncrease()  # 장평 1 늘이기\n",
+    "hwp.CharShapeWidthDecrease()  # 장평 1 줄이기\n",
+    "\n",
+    "hwp.CharShapeHeightIncrease()  # 글자크기 1pt 크게\n",
+    "hwp.CharShapeHeightDecrease()  # 글자크기 1pt 작게\n",
+    "\n",
+    "hwp.CharShapeNextFaceName()  # 서체목록 중 다음 서체로 변경\n",
+    "hwp.CharShapePrevFaceName()  # 서체목록 중 이전 서체로 변경\n",
+    "\n",
+    "# 선택한 글자의 색 바꾸는 명령어들\n",
+    "hwp.CharShapeTextColorBlack()\n",
+    "hwp.CharShapeTextColorRed()  \n",
+    "hwp.CharShapeTextColorBlue()\n",
+    "hwp.CharShapeTextColorGreen()\n",
+    "hwp.CharShapeTextColorBluish()\n",
+    "hwp.CharShapeTextColorViolet()\n",
+    "hwp.CharShapeTextColorYellow()\n",
+    "hwp.CharShapeTextColorWhite()\n",
+    "\n",
+    "hwp.CharShapeNormal()  # 글자모양 기타속성 제거\n",
+    "</code></pre>\n",
+    "    \n",
+    "</div>\n",
+    "<div class=\"muted text-right\" style=\"font-size: 0.9em;margin:10px 0;\">\n",
+    "    \n",
+    "    마지막 편집일시 : 2024년 10월 19일 9:53 오후\n",
+    "    \n",
+    "</div>\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "bc754dc0",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from pyhwpx import Hwp\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 연결\n",
+    "\n",
+    "hwp.MoveDocBegin()  # 문서 시작점으로 이동한 후,\n",
+    "hwp.MoveSelParaEnd()\n",
+    "\n",
+    "#prop = hwp.CharShape\n",
+    "#prop.SetItem(\"Height\", \"2000\")\n",
+    "#prop.SetItem(\"Italic\", True)  # 이탤릭체로 설정\n",
+    "#hwp.CharShape = prop  # 변경된 속성을 적용\n",
+    "\n",
+    "hwp.set_font(\n",
+    "    Height=20,\n",
+    "    UnderlineShape=10,\n",
+    "    UnderlineType=1,\n",
+    "    UnderlineColor=hwp.rgb_color(\"Red\"),\n",
+    "    Italic=True)\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ca717338",
+   "metadata": {},
+   "source": [
+    "##### 05-2 문단모양 속성 조회 및 변경(hwp.ParaShape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "b7b2b9db",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from pyhwpx import Hwp  # pyhwpx의 Hwp 클래스 임포트\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 실행(혹은 열려 있는 문서에 연결)\n",
+    "hwp.ParaShape.Item(\"AlignType\")  # 문단 정렬타입 조회"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c030a2de",
+   "metadata": {},
+   "source": [
+    "이번엔 변경방법을 알아보겠습니다.\n",
+    "AlignType을 코드로 변경해서, 원하는 정렬상태로 만들어봅시다.\n",
+    "\n",
+    "먼저 모든 표(비록 두 개 뿐이지만)를 순회하면서 1행을 가운데정렬(3) 상태로 변경하는 코드입니다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "f4813c1e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "i = 0\n",
+    "while hwp.get_into_nth_table(i):\n",
+    "    hwp.TableCellBlockRow()  # 1행 전체 선택\n",
+    "\n",
+    "    # 중앙정렬하는 코드\n",
+    "    prop = hwp.ParaShape\n",
+    "    prop.SetItem(\"AlignType\", 3)\n",
+    "    hwp.ParaShape = prop\n",
+    "    i += 1\n",
+    "hwp.Cancel()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "33b8636b",
+   "metadata": {},
+   "source": [
+    "조금 더 응용해볼까요?\n",
+    "이번엔 본문의 모든 문단을 순회하면서\n",
+    "\n",
+    "문단번호가 매겨져 있는 모든 문단에는, \"문단 위 간격\"을 50pt 씩 적용하기, 가능할까요?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b296b634",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "from pyhwpx import Hwp  # pyhwpx의 Hwp 클래스 임포트\n",
+    "\n",
+    "hwp = Hwp()  # 아래아한글 실행(혹은 열려 있는 문서에 연결)\n",
+    "\n",
+    "i = 0\n",
+    "while hwp.set_pos(0, i, 0):  # 본문의 para만 순회하면서\n",
+    "    if hwp.GetHeadingString():  # 문단번호가 매겨져 있으면\n",
+    "        prop = hwp.ParaShape\n",
+    "        prop.SetItem(\"PrevSpacing\", hwp.PointToHwpUnit(50))\n",
+    "        hwp.ParaShape = prop\n",
+    "    i += 1\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
